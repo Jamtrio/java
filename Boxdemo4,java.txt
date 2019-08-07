@@ -1,0 +1,25 @@
+class Box
+{
+	double width;
+	double height;
+	double length;
+}
+Box()
+{
+	width=10;
+	height=10;
+	length=10;
+}
+double vol()
+{
+	return (height*width*length);
+}
+
+public class BoxDemo4
+{
+	public static void main(String args[])
+	{
+		Box b1 =new Box();
+		b1.vol();
+	}
+}
