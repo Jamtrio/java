@@ -1,0 +1,197 @@
+import java.awt.*;
+import java.awt.event.*;
+
+class Calc extends Frame implements TextListener,ActionListener
+{
+	Button b[] = new Button[11],plus,minus,div,mul,ce,eq;
+	static TextField ans;
+	static boolean newnum;
+    handler h = new handler();
+	
+	public Calc(String s)
+	{
+      super(s);
+	  setLayout(new FlowLayout());
+      newnum=false;
+	  ans = (TextField)add(new TextField(20));
+	  
+	  
+	  for(int i=1;i<=9;i++)
+		{
+		   b[i] = new Button("      "+i+"      ");
+           b[i].setSize(20,10);
+		   add(b[i]);
+		}
+      
+	  
+	  ce = new Button("      CE    ");
+	  b[0] =  new Button("      0      ");
+      b[10] = new Button("      .      ");
+	  plus = new Button("  +  ");
+	  minus = new Button("  -  ");
+	  div = new Button("  /  ");
+	  mul = new Button("  X  ");
+	  eq = new Button("  =  ");
+
+	  add(ce);
+	  add(b[0]);
+	  add(b[10]);
+	  add(plus);
+	  add(minus);
+	  add(div);
+	  add(mul);
+	  add(eq);
+
+	  addWindowListener(new WindowAdapter() 
+	  	{
+	  		 public void windowClosing(WindowEvent we)
+	  		 	{System.exit(0);
+	  		 	} 
+	  	});
+	  ans.addTextListener(this);
+	  for(int i=0;i<11;i++)
+		        b[i].addActionListener(this);  
+	  ce.addActionListener(h);
+	  plus.addActionListener(h);
+	  minus.addActionListener(h);
+	  div.addActionListener(h);
+	  eq.addActionListener(h);
+	  mul.addActionListener(h);
+	}
+    
+	public void textValueChanged(TextEvent te)
+	{
+		String s;
+		if (newnum)
+		{
+		    ans.setText("");	
+		}
+		try
+			{
+				s = ans.getText();
+				char c = s.charAt(s.length()-1);
+				if(c=='0'||c=='1'||c=='2'||c=='3'||c=='4'||c=='5'||c=='6'||c=='7'||c=='8'||c=='9'||c=='.')
+					{ }
+				else
+					ans.setText(s.substring(0,s.length()-1));
+				ans.setCaretPosition(22);
+		    }
+			catch (Exception e)
+			{
+			
+			}
+        newnum=false;
+	}	
+	
+
+	public void actionPerformed(ActionEvent ae)
+	{
+        String s = (ae.getActionCommand()).trim();
+		if (newnum)
+		{
+			ans.setText("");
+		}
+		ans.setText(ans.getText()+s);
+		newnum=false;
+	}
+}
+
+class handler implements ActionListener
+{
+	static float op1;
+	String op="";
+	public void actionPerformed(ActionEvent ae)
+	{
+	   String s = (ae.getActionCommand()).trim();
+	   try
+		   {
+		    if(s.equals("CE"))
+			{
+				op1 = 0f;
+				Calc.ans.setText("");
+				Calc.newnum = false;
+				op="";
+			}
+			else if (s.equals("+"))
+			{
+				if(op1 == 0)
+		   				op1 = Float.parseFloat(Calc.ans.getText());
+				else
+		   				Calculate();  
+				Calc.newnum = true;
+				op=s;
+			}
+			else if(s.equals("-"))
+				{
+					if(op1 == 0)
+						op1 = Float.parseFloat(Calc.ans.getText());
+					else
+						Calculate();
+					Calc.newnum = true;
+					op=s;
+				}
+				else if(s.equals("/"))
+				{
+					if(op1 == 0)
+						op1 = Float.parseFloat(Calc.ans.getText());
+					else
+						Calculate();
+					Calc.newnum = true;
+					op=s;
+				}
+				else if(s.equals("X"))
+				{
+					if(op1 == 0)
+						op1 = Float.parseFloat(Calc.ans.getText());
+					else
+						Calculate();
+					Calc.newnum = true;
+					op=s;
+				}
+			    else
+				{
+					Calculate();
+					Calc.ans.setText(op1+"");
+					op1=0f;
+		 		}
+		}
+		catch(Exception e)  { }
+	}
+
+ public void Calculate()
+	 {
+        try
+			{
+			   if (op.equals("+"))
+				{
+					op1 = op1 + Float.parseFloat(Calc.ans.getText());
+				}
+				else if (op.equals("-"))
+				{
+					op1 = op1 - Float.parseFloat(Calc.ans.getText());
+				}
+				else if (op.equals("/"))
+				{
+					op1 = op1 / Float.parseFloat(Calc.ans.getText());
+				}
+				else if (op.equals("X"))
+				{
+					op1 = op1 * Float.parseFloat(Calc.ans.getText());
+				}
+				Calc.ans.setText(op1+"");
+			}
+			catch(Exception e) { }
+	 }
+}
+
+class CalcApp 
+{
+	public static void main(String[] args) 
+	{
+		Calc c = new Calc("Calculator");
+		
+		c.setSize(200,220);
+		c.show();
+		c.repaint();
+	}
+}
